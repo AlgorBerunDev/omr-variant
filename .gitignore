@@ -1,0 +1,14 @@
+# Jupyter Notebook checkpoints
+.ipynb_checkpoints/
+
+# Python virtual environment
+venv/
+
+# Image files
+*.jpg
+
+# Archive files
+*.zip
+
+# IDE configuration files
+.idea/
