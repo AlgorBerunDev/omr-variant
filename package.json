@@ -1,0 +1,11 @@
+{
+  "name": "omr-variant",
+  "version": "1.0.0",
+  "description": "#### 1. Установка зависимостей с помощью `requirements.txt`",
+  "main": "index.js",
+  "author": "",
+  "license": "ISC",
+  "scripts": {
+    "start": "nodemon --exec python src/main.py --ext py"
+  }
+}
