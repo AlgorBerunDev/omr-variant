@@ -12,3 +12,4 @@ venv/
 
 # IDE configuration files
 .idea/
+.env
