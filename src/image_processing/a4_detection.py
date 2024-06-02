@@ -81,12 +81,13 @@ def order_points(pts):
     
     return rect
 
-for i in range(1, 16):
-    # Пример использования
-    # Загрузка изображения с помощью OpenCV
-    cv_image = cv2.imread(f'./images/old_images/{i}.jpg')
+def test():
+    for i in range(1, 16):
+        # Пример использования
+        # Загрузка изображения с помощью OpenCV
+        cv_image = cv2.imread(f'./images/old_images/{i}.jpg')
 
-    # Обрезка изображения с листом формата A4
-    wrapped_image = wrap_document(cv_image)
-    cv2.imwrite(f'./images/wrapped_old_images/{i}.jpg', wrapped_image)
+        # Обрезка изображения с листом формата A4
+        wrapped_image = wrap_document(cv_image)
+        cv2.imwrite(f'./images/wrapped_old_images/{i}.jpg', wrapped_image)
 
