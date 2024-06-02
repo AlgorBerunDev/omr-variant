@@ -1,7 +1,7 @@
-import cv2
 from minio import Minio
 from minio.error import S3Error
 import os
+import cv2
 from src.config import MINIO_ENDPOINT, MINIO_ACCESS_KEY, MINIO_SECRET_KEY, MINIO_BUCKET_NAME
 
 # Создание клиента MinIO
@@ -49,4 +49,52 @@ def update_image(image_path, object_name):
         upload_image(image_path, object_name)
         print(f"Image updated successfully: {object_name}")
     except S3Error as e:
+        print(f"Error occurred: {e}")
+
+def read_image_cv2(image_url):
+    try:
+        # Загрузка изображения из MinIO
+        image_path = download_image(image_url)
+        if image_path:
+            # Чтение изображения с использованием cv2
+            image = cv2.imread(image_path)
+            return image
+        else:
+            return None
+    except Exception as e:
+        print(f"Error occurred: {e}")
+        return None
+
+def save_image_cv2(image, image_path):
+    try:
+        # Сохранение изображения с использованием cv2
+        cv2.imwrite(image_path, image)
+        print(f"Image saved successfully: {image_path}")
+        return image_path
+    except Exception as e:
+        print(f"Error occurred: {e}")
+        return None
+
+def upload_image_cv2(image, object_name):
+    try:
+        # Преобразование изображения в буфер
+        is_success, buffer = cv2.imencode('.jpg', image)
+        if not is_success:
+            print("Failed to convert image to buffer")
+            return None
+        
+        # Преобразование буфера в поток
+        image_stream = BytesIO(buffer)
+        image_stream.seek(0)
+        
+        # Загрузка изображения в MinIO напрямую из потока
+        minio_client.put_object(
+            bucket_name=MINIO_BUCKET_NAME,
+            object_name=object_name,
+            data=image_stream,
+            length=len(buffer),
+            content_type='image/jpeg'
+        )
+        print(f"Image uploaded successfully: {object_name}")
+    except Exception as e:
         print(f"Error occurred: {e}")
