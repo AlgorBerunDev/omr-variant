@@ -6,14 +6,11 @@ credentials = pika.PlainCredentials(RABBITMQ_USER, RABBITMQ_PASS)
 connection = pika.BlockingConnection(pika.ConnectionParameters(host=RABBITMQ_HOST, credentials=credentials))
 channel = connection.channel()
 
-# Удаление существующей очереди
-channel.queue_delete(queue=RABBITMQ_QUEUE)
-
 # Создание обменника типа 'direct'
 channel.exchange_declare(exchange='direct_logs', exchange_type='direct')
 
-# Создание новой очереди с параметром durable=True
-result = channel.queue_declare(queue=RABBITMQ_QUEUE, durable=True)
+# Создание или подключение к существующей очереди с параметром durable=True
+result = channel.queue_declare(queue=RABBITMQ_QUEUE, durable=True)  # Удалите exclusive=True
 queue_name = result.method.queue
 
 # Привязка очереди к обменнику с определенным маршрутным ключом
