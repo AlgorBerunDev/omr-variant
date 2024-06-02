@@ -1,7 +1,11 @@
+import sys
+import os
+sys.path.append(os.path.join(os.path.dirname(__file__), '..', '..'))
 from minio import Minio
 from minio.error import S3Error
-import os
 import cv2
+import numpy as np
+from io import BytesIO
 from src.config import MINIO_ENDPOINT, MINIO_ACCESS_KEY, MINIO_SECRET_KEY, MINIO_BUCKET_NAME
 
 # Создание клиента MinIO
