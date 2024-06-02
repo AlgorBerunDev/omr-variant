@@ -1,6 +1,4 @@
-import sys
 import os
-sys.path.append(os.path.join(os.path.dirname(__file__), '..', '..'))
 from minio import Minio
 from minio.error import S3Error
 import cv2

@@ -1,4 +1,5 @@
 import pika
+import uuid
 from src.config import RABBITMQ_HOST, RABBITMQ_QUEUE, RABBITMQ_USER, RABBITMQ_PASS
 
 # Подключение к локальному серверу RabbitMQ
@@ -15,6 +16,7 @@ channel.queue_declare(queue=RABBITMQ_QUEUE, durable=True)
 # Определение маршрутного ключа и тела сообщения
 routing_key = 'info'
 message = 'Hello World!'
+correlation_id = str(uuid.uuid4())  # Уникальный идентификатор сообщения
 
 # Отправка сообщения в обменник
 channel.basic_publish(exchange='direct_logs',
@@ -22,8 +24,9 @@ channel.basic_publish(exchange='direct_logs',
                       body=message,
                       properties=pika.BasicProperties(
                           delivery_mode=2,  # Делает сообщение устойчивым
+                          correlation_id=correlation_id  # Уникальный идентификатор для отслеживания
                       ))
-print(f" [x] Sent {routing_key}:{message}")
+print(f" [x] Sent {routing_key}:{message} with correlation_id {correlation_id}")
 
 # Закрытие соединения
 connection.close()

@@ -40,3 +40,7 @@ project/
 ├── requirements.txt
 ├── README.md
 └── .gitignore
+
+```python
+sys.path.append(os.path.join(os.path.dirname(__file__), '..', '..'))
+```
