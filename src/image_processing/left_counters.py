@@ -19,10 +19,10 @@ def find_left_counters(image, threshold_value=50, num_contours=65):
         
         # Проверка соотношений сторон
         if 2 < w / h < 5:
-            filtered_contours.append((x, y, w, h))
+            filtered_contours.append(contour)
 
     # Сортировка контуров по координате x (самые левые)
-    filtered_contours.sort(key=lambda rect: rect[0])
+    filtered_contours.sort(key=lambda contour: cv2.boundingRect(contour)[0])
 
     # Оставляем только самые левые num_contours контуров
     leftmost_contours = filtered_contours[:num_contours]
@@ -30,8 +30,7 @@ def find_left_counters(image, threshold_value=50, num_contours=65):
     return leftmost_contours
 
 def find_contour_by_y_order(contours, order=1):
-    # Сортировка контуров по координате y
-    contours.sort(key=lambda rect: rect[1])
+    contours.sort(key=lambda contour: cv2.boundingRect(contour)[1])
 
     # Возвращаем контур по порядковому номеру
     if 0 < order <= len(contours):
