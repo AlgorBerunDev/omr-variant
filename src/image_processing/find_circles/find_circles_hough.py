@@ -36,5 +36,3 @@ def find_circles_hough():
             cv2.circle(image, (x, y), r, (0,255,0), -1)
             # cv2.circle(image, (x, y), r, (int(mean_color[0]), int(mean_color[1]), int(mean_color[2])), -1)
 
-        # Отображение результатов
-  cv2_imshow(image)
