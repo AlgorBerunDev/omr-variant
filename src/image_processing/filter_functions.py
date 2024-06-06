@@ -1,4 +1,5 @@
 import cv2
+from intersection_functions import is_intersects
 
 def get_gt_n_intersect_counters(contours, gt_n = 65, axis='x'):
     """

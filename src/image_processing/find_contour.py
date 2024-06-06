@@ -40,3 +40,9 @@ def find_contours_of_base_rectangles(image, threshold_value = 100, num_contours 
     # Оставляем только самые левые num_contours контуров
     return filtered_contours[:num_contours]
 
+def test_find_contours_of_base_rectangles():
+  for i in [1,3,4,5,12,13,14,15,16]:
+      image = cv2.imread(f"images/wrapped_origin/{i}.jpg")
+      conturs = find_contours_of_base_rectangles(image)
+      cv2.drawContours(image, conturs, -1, (0,255,0), 2)
+      cv2.imwrite(f"{i}.jpg", image)
