@@ -4,23 +4,22 @@ import numpy as np
 def check_intersection(contour1, contour2):
     """
     Проверяет пересечение двух контуров.
-    
+
     :param contour1: Первый контур.
     :param contour2: Второй контур.
     :return: True, если есть пересечение, иначе False.
     """
     if len(contour1) == 0 or len(contour2) == 0:
         return False
-    
+
     # Преобразуем контуры в выпуклые оболочки
     hull1 = cv2.convexHull(contour1.astype(np.float32))
     hull2 = cv2.convexHull(contour2.astype(np.float32))
-    
+
     # Проверка пересечения выпуклых оболочек
     ret, _ = cv2.intersectConvexConvex(hull1, hull2)
-    
-    return ret > 0
 
+    return ret > 0
 
 def intersection_area(contour1, contour2):
     """
@@ -46,7 +45,7 @@ def intersection_area(contour1, contour2):
 
 def find_intersections(leftmost_contours, circle_contours):
     intersections = []
-    
+
     for left_contour in leftmost_contours:
         for circle_contour in circle_contours:
             if check_intersection(left_contour, circle_contour):
@@ -56,17 +55,17 @@ def find_intersections(leftmost_contours, circle_contours):
     return intersections
 
 def remove_intersections(counters, filter_counters):
-  not_intersections = []
-    
-  for counter in counters:
-    is_intersection = False
-    for filter_counter in filter_counters:
-        if check_intersection(counter, filter_counter):
-            is_intersection = True
-            break
-    if not is_intersection:
-      not_intersections.append(counter)
-  return not_intersections
+    not_intersections = []
+
+    for counter in counters:
+        is_intersection = False
+        for filter_counter in filter_counters:
+            if check_intersection(counter, filter_counter):
+                is_intersection = True
+                break
+        if not is_intersection:
+            not_intersections.append(counter)
+    return not_intersections
 
 def get_counters_after_counter(counters, counter, axis='y'):
     """
@@ -137,20 +136,20 @@ def get_counters_before_counter(counters, counter, axis='y'):
 def create_horizontal_rectangle_counter(counter, max_width_point):
     """
     Создает горизонтальный контур (прямоугольник) на основе заданного контура.
-    
+
     :param counter: Заданный контур.
     :param max_width_point: Максимальная точка по ширине.
     :return: Горизонтальный контур (прямоугольник).
     """
     if len(counter) == 0:
         return np.array([], dtype=np.float32)
-    
+
     # Определяем ограничивающий прямоугольник для контура
     x, y, w, h = cv2.boundingRect(counter)
-    
+
     # Создаем горизонтальный контур (прямоугольник)
     horizontal_rectangle_counter = np.array([[x, y], [max_width_point, y], [max_width_point, y + h], [x, y + h]], dtype=np.float32)
-    
+
     return horizontal_rectangle_counter
 
 def intersection_length(line1_start_x, line1_end_x, line2_start_x, line2_end_x):
@@ -168,3 +167,22 @@ def intersection_length(line1_start_x, line1_end_x, line2_start_x, line2_end_x):
     length = max(0, end - start)
     
     return length
+
+def is_intersects(x1, w1, x2, w2):
+    return (x1 <= x2 <= x1 + w1) or (x2 <= x1 <= x2 + w2)
+
+def group_by_intersection_by_axis(counters, axis = 'x'):
+    intersection_groups = []
+
+    for cnt1 in counters:
+        x1,y1,w1,h1 = cv2.boundingRect(cnt1)
+        for cnt2 in counters:
+            x2,y2,w2,h2 = cv2.boundingRect(cnt2)
+            if axis == 'x':
+                if is_intersects(x1, w1, x2, w2):
+                    intersection_groups.append(cnt2)
+            elif axis == 'y':
+                if is_intersects(x1, w1, x2, w2):
+                    intersection_groups.append(cnt2)
+
+    return intersection_groups

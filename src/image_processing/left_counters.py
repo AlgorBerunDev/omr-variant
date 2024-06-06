@@ -1,5 +1,6 @@
 import cv2
 import numpy as np
+import intersection_functions
 
 def find_left_counters(image, threshold_value=110, num_contours=65):
     gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
@@ -28,14 +29,21 @@ def find_left_counters(image, threshold_value=110, num_contours=65):
         x, y, w, h = cv2.boundingRect(contour)
 
         # Проверка соотношений сторон
-        if 1 < w / h < 7 and 10 < h < 45 and 25 < w < 65:
+        if 1 < w / h < 7 and w*h > 600 and w*h < 1000:
             filtered_contours.append(contour)
     
+    grouped_intersection = intersection_functions.group_by_intersection_by_x(filtered_contours)
+    max_grouped_intersection = max(grouped_intersection, key=len)
+    image_c = image.copy()
+    cv2.drawContours(image_c, max_grouped_intersection, -1, (0,255,0), 2)
+    # cv2.drawContours(image_c, filtered_contours, -1, (0,255,0), 2)
+    cv2.imwrite("asd.jpg", image_c)
+
     # Сортировка контуров по координате x (самые левые)
-    filtered_contours.sort(key=lambda contour: cv2.boundingRect(contour)[0])
+    max_grouped_intersection.sort(key=lambda contour: cv2.boundingRect(contour)[0])
 
     # Оставляем только самые левые num_contours контуров
-    leftmost_contours = filtered_contours[:num_contours]
+    leftmost_contours = max_grouped_intersection[:num_contours]
     
     return leftmost_contours
 
@@ -57,3 +65,15 @@ def get_image_dimensions(image):
     """
     height, width = image.shape[:2]
     return width, height
+
+for i in [1,3,4,5,12,13,14,15,16]:
+    image = cv2.imread(f"./images/wrapped_origin/{i}.jpg")
+    leftmost_contours = find_left_counters(image, 90)
+    pass
+    for cnt in leftmost_contours:
+        (x, y, w, h) = cv2.boundingRect(cnt)
+        cv2.rectangle(image, (x, y), (x + w, y + h), (0, 255, 0), 2)
+    order_contour = find_contour_by_y_order(leftmost_contours, 3)
+    x, y, w, h = cv2.boundingRect(order_contour)
+    cv2.rectangle(image, (x, y), (x + w, y + h), (255, 0, 0), 2)
+    cv2.imwrite(f"./images/find_left_counters/{i}.jpg", image)
