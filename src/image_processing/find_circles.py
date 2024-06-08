@@ -133,5 +133,5 @@ def find_circles(image):
   return answer_cols
 # for i in [1,3,4,5,12,13]:
 image = cv2.imread(f"./images/wrapped_origin/3.jpg")
-answers =find_circles(image)
+answers = find_circles(image)
 print(answers)
