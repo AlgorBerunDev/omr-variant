@@ -9,6 +9,9 @@ def check_intersection(contour1, contour2):
     :param contour2: Второй контур.
     :return: True, если есть пересечение, иначе False.
     """
+    if contour1 is None or contour2 is None:
+        return False
+
     if len(contour1) == 0 or len(contour2) == 0:
         return False
 
