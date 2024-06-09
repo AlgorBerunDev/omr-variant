@@ -5,7 +5,7 @@ import intersection_functions
 def find_left_counters(image, threshold_value=110, num_contours=65):
     gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
 
-    blurred = cv2.GaussianBlur(gray, (3,3), 0)
+    # blurred = cv2.GaussianBlur(gray, (3,3), 0)
 
     # Применение эрозии для улучшения видимости контуров
     kernel = np.ones((1,0), np.uint8)
