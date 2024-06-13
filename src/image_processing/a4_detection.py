@@ -1,6 +1,5 @@
 import cv2
 import numpy as np
-import display_image
 
 def wrap_document(cv_image):
     """

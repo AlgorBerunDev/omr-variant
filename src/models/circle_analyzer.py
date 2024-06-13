@@ -1,11 +1,10 @@
 import cv2
 import numpy as np
-from image import Image
-import create_contour_helper
-import rect_analyzer 
-import intersection_helper 
-import filter_contour_helper 
-
+from .image import Image
+from . import create_contour_helper
+from . import rect_analyzer 
+from . import intersection_helper 
+from . import filter_contour_helper 
 
   
 def findContours(image):

@@ -1,7 +1,7 @@
 import cv2
 import numpy as np
-import intersection_helper
-import filter_contour_helper
+from . import intersection_helper
+from . import filter_contour_helper
 
 
 
